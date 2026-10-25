@@ -1,6 +1,6 @@
 ---
 name: witcut
-description: Plan, capture, edit, review, and hand off real-UI product-demo videos. Use for cinematic screen recordings, feature walkthroughs, motivated zoom revisions, encoded-cut QA, and recoverable production packages. Preserve interaction causality and approved-version boundaries.
+description: Plan evidence-linked product demos and podcast-to-video scripts; capture, edit, review, and hand off real-UI demos. Use for cinematic screen recordings, feature walkthroughs, motivated zoom revisions, encoded-cut QA, and recoverable production packages. Preserve interaction causality and approved-version boundaries.
 ---
 
 # Witcut
@@ -11,6 +11,7 @@ Make the viewer understand a real product through purposeful filmmaking. This is
 
 Do not repeat the entire production process for a narrow review. Read only the relevant reference:
 
+- Structured audiovisual script, shot plan, or podcast-to-video adaptation: [planning core](references/planning.md). Generate all three planning outputs from the same input; label unverified or intended states and record missing materials.
 - Story, framing, rhythm, or weak visual direction: [art direction](references/art-direction.md).
 - New recording, tiny UI, resolution, or motion issues: [capture](references/capture.md).
 - Encoded draft, playback issue, or review-only request: [QA](references/qa.md).
