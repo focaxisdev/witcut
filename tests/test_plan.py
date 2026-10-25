@@ -120,6 +120,70 @@ class PlanningTests(unittest.TestCase):
         self.assertIn('editorial/visual', script)
         self.rejects(lambda p: p['scenes'][0].update(claim_state='current'), 'verified real evidence')
 
+    def test_narrated_operation_is_not_shown(self):
+        self.p['sources'].append(dict(id='voice', kind='real', duration=30,
+            provenance='Hypothetical audio only.', verification='verified',
+            rights='cleared', modality='audio'))
+        self.p['operations'][0]['source_id'] = 'voice'
+        self.p['scenes'][0]['evidence'].append(dict(source_id='voice', start=0,
+            end=5, role='narration', output_start=0, output_end=5, playback='play'))
+        self.assertTrue(any('played visual evidence' in e for e in plan.validate(self.p)[0]))
+
+    def test_source_cannot_fit_into_short_scene(self):
+        self.rejects(lambda p: p['scenes'][0].update(duration=0.1), 'output range outside scene')
+
+    def test_unstated_time_compression_rejected(self):
+        self.rejects(lambda p: p['scenes'][0]['evidence'][0].update(output_end=0.1), '1x source/output duration')
+
+    def test_invalid_mapping(self):
+        for value in (-1, float('nan'), True):
+            p = copy.deepcopy(self.p)
+            p['scenes'][0]['evidence'][0]['output_start'] = value
+            self.assertTrue(plan.validate(p)[0])
+        self.rejects(lambda p: p['scenes'][0]['evidence'][0].update(playback='speed-up'), 'unknown playback')
+
+    def test_hold_and_reference_cannot_demonstrate_operation(self):
+        for mode in ('hold', 'reference'):
+            p = copy.deepcopy(self.p)
+            p['scenes'][0]['evidence'][0]['playback'] = mode
+            self.assertTrue(any('played visual evidence' in e for e in plan.validate(p)[0]))
+
+    def test_script_reference_is_not_recorded_speech(self):
+        p = json.loads((ROOT / 'skills/witcut/examples/plans/podcast-to-video.json').read_text())
+        p['scenes'][0]['evidence'][0]['playback'] = 'play'
+        self.assertTrue(any('script needs recording' in e for e in plan.validate(p)[0]))
+
+    def test_same_scene_mapped_predecessor_order(self):
+        self.p['operations'][1].update(relationship='sequential', predecessors=['select-a'])
+        scene = self.p['scenes'][0]
+        scene['duration'] = 16
+        scene['operation_ids'].append('select-b')
+        scene['evidence'].append(dict(self.p['scenes'][1]['evidence'][0]))
+        self.p['scenes'].pop()
+        self.assertTrue(any('mapped predecessor' in e for e in plan.validate(self.p)[0]))
+        scene['evidence'][1].update(output_start=5, output_end=10)
+        self.assertFalse(plan.validate(self.p)[0])
+        scene['operation_ids'].reverse()
+        self.assertFalse(plan.validate(self.p)[0])
+
+    def test_duplicate_and_ambiguous_operation_coverage(self):
+        p = copy.deepcopy(self.p)
+        p['scenes'][0]['operation_ids'].append('select-a')
+        self.assertTrue(any('duplicate operation' in e for e in plan.validate(p)[0]))
+        p = copy.deepcopy(self.p)
+        p['scenes'][0]['evidence'].append(copy.deepcopy(p['scenes'][0]['evidence'][0]))
+        self.assertTrue(any('unambiguous played visual' in e for e in plan.validate(p)[0]))
+
+    def test_script_reference_still_needs_recording(self):
+        p = json.loads((ROOT / 'skills/witcut/examples/plans/podcast-to-video.json').read_text())
+        p['scenes'][0]['needs'] = []
+        errors, missing = plan.validate(p)
+        self.assertFalse(errors)
+        self.assertTrue(any('narration recording/playback' in m['need'] for m in missing))
+
+    def test_old_schema_requires_explicit_migration(self):
+        self.rejects(lambda p: p.update(version='1'), 'unsupported version')
+
     def test_cli_preserves_existing_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
             out=Path(tmp)/'out'

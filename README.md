@@ -10,7 +10,7 @@ An agent skill for making thoughtful product-demo videos from real UI—not just
 
 Witcut is an **instruction-driven production workflow**. It helps an agent plan shots, capture authentic interactions, make motivated editing decisions, review the actual deliverable, and hand off recoverable work using tools available in its environment.
 
-It is **not yet an automatic video editor**, rendering engine, hosted service, or browser-control integration. Loading this skill does not provide those tools or grant access to a computer. The included Python tools validate repository structure and evidence-linked planning data; they do not edit or certify videos.
+It is **not yet an automatic video editor**, rendering engine, hosted service, or browser-control integration. Loading this skill does not provide those tools or grant access to a computer. The standard-library planning tools validate repository structure and evidence-linked planning data. An optional, bounded FFmpeg adapter renders an original synthetic test fixture; it does not capture real UI or certify videos.
 
 ## Why it exists
 
@@ -65,14 +65,18 @@ python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
 ```
 
+Without FFmpeg/libflite or the fixture font, render integration tests explicitly skip; the planner remains standard-library only. See the [synthetic pilot](skills/witcut/references/render-fixture.md) for optional runtime requirements, generation and replay commands.
+
 These checks validate the package's frontmatter, local Markdown file links, required structure, and planning-schema invariants (including adversarial inputs and CLI output protection). They cannot establish artistic quality, privacy completeness, licensing, or agent behavior. [Scenario checks](tests/scenarios.md) provide realistic behavioral evaluation tasks and evidence requirements.
 
 ## Roadmap—not shipped capabilities
 
-Shipped planning milestone: [shared planning core](skills/witcut/references/planning.md) for product-demo and podcast-to-video profiles, deriving an audiovisual script, machine-readable shot plan, and missing-material list. Synthetic examples are not real media evidence.
+Shipped planning milestone (schema v2, explicit source-to-output timing): [shared planning core](skills/witcut/references/planning.md) for product-demo and podcast-to-video profiles, deriving an audiovisual script, machine-readable shot plan, and missing-material list. Synthetic examples are not real media evidence.
 
-1. Timed narration and richer editorial-asset contracts, followed by source-inspecting adapters.
-2. Deterministic timeline and render adapters, with small reproducible fixtures.
+A [bounded collaboration strategy](skills/witcut/references/collaboration.md) covers available model/reasoning choices, role handoffs, and finite loops whose final check remains viewer understanding.
+
+1. Validate the original synthetic pilot through actual viewing and listening, then extend only where a demonstrated failure requires it.
+2. Extend the single fixture adapter only for a demonstrated production need; broad editing automation remains unshipped.
 3. Automated technical checks tied to the exact output artifact.
 4. Agent-assisted rough cuts with reviewable decisions and explicit approval boundaries.
 5. Broader editing automation, evaluated against real footage and human acceptance.

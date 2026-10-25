@@ -1,5 +1,5 @@
 {
-  "version": "1",
+  "version": "2",
   "profile": "product-demo",
   "brief": {
     "revision": "r2",
@@ -62,7 +62,10 @@
           "source_id": "mock-ui",
           "start": 0,
           "end": 5,
-          "role": "visual"
+          "role": "visual",
+          "output_start": 0,
+          "output_end": 5,
+          "playback": "play"
         }
       ],
       "needs": [
@@ -85,7 +88,10 @@
           "source_id": "mock-ui",
           "start": 10,
           "end": 15,
-          "role": "visual"
+          "role": "visual",
+          "output_start": 0,
+          "output_end": 5,
+          "playback": "play"
         }
       ],
       "needs": [

@@ -16,7 +16,8 @@ SCHEMA = {
                     'source_id': str, 'start': float, 'end': float, 'observation': str, 'omission_reason': str}],
     'scenes': [{'id': str, 'duration': float, 'purpose': str, 'spoken': str,
                 'visual': str, 'alignment': str, 'claim_state': str,
-                'operation_ids': [str], 'evidence': [{'source_id': str, 'start': float, 'end': float, 'role': str}],
+                'operation_ids': [str], 'evidence': [{'source_id': str, 'start': float, 'end': float, 'role': str,
+                    'output_start': float, 'output_end': float, 'playback': str}],
                 'needs': [str]}],
 }
 
@@ -66,7 +67,7 @@ def validate(plan):
     sources = unique(plan['sources'], 'sources')
     operations = unique(plan['operations'], 'operations')
     unique(plan['scenes'], 'scenes')
-    require(plan['version'] == '1', 'unsupported version')
+    require(plan['version'] == '2', 'unsupported version')
     require(plan['profile'] in ('product-demo', 'podcast-to-video'), 'unknown profile')
     brief = plan['brief']
     require(bool(brief['revision'].strip()) and brief['revision'] == brief['latest_revision'], 'brief: not latest revision')
@@ -135,13 +136,25 @@ def validate(plan):
         require(scene['claim_state'] in ('current', 'intended', 'illustrative'), f'{sid}: unknown claim state')
         refs = [evidence(ref, sid) for ref in scene['evidence']]
         visuals = []
+        for ref in scene['evidence']:
+            require(0 <= ref['output_start'] < ref['output_end'] <= scene['duration'], f'{sid}: output range outside scene')
+            require(ref['playback'] in ('play', 'hold', 'reference'), f'{sid}: unknown playback')
+            if ref['playback'] == 'play':
+                require(math.isclose(ref['end'] - ref['start'], ref['output_end'] - ref['output_start'], abs_tol=1e-6, rel_tol=0), f'{sid}: play requires 1x source/output duration')
+                source = sources.get(ref['source_id'])
+                require(not source or source['modality'] != 'script', f'{sid}: script needs recording before playback')
+            if ref['playback'] == 'hold':
+                require(ref['role'] == 'visual', f'{sid}: hold requires visual-only role')
         for ref, source in zip(scene['evidence'], refs):
             require(ref['role'] in ('narration', 'visual', 'both'), f'{sid}: unknown evidence role')
             if source:
                 if ref['role'] in ('visual', 'both'):
                     require(source['modality'] in ('visual', 'audiovisual'), f'{sid}: visual evidence needs visual source')
-                    visuals.append(source)
+                    if ref['playback'] != 'reference':
+                        visuals.append(source)
                 if ref['role'] in ('narration', 'both'):
+                    if source['modality'] == 'script' or ref['playback'] == 'reference':
+                        missing.append({'context': sid, 'need': f'{source["id"]}: narration recording/playback'})
                     require(source['modality'] in ('audio', 'audiovisual', 'script'), f'{sid}: narration evidence needs audio/script source')
         if not visuals:
             missing.append({'context': sid, 'need': 'visual evidence or explicit editorial asset'})
@@ -156,13 +169,26 @@ def validate(plan):
         for need in scene['needs']:
             require(bool(need.strip()), f'{sid}: empty material need')
             missing.append({'context': sid, 'need': need})
+        require(len(scene['operation_ids']) == len(set(scene['operation_ids'])), f'{sid}: duplicate operation IDs')
+        placements = {}
         for oid in scene['operation_ids']:
             require(oid in operations, f'{sid}: unknown operation {oid}')
             if oid not in operations:
                 continue
             op = operations[oid]
-            require(set(op['predecessors']) <= shown, f'{sid}: sequential predecessor not shown earlier')
-            require(any(r['source_id'] == op['source_id'] and r['start'] <= op['start'] and r['end'] >= op['end'] for r in scene['evidence']), f'{sid}: operation {oid} not covered by scene evidence')
+            coverage = [r for r in scene['evidence'] if r['source_id'] == op['source_id']
+                        and r['role'] in ('visual', 'both') and r['playback'] == 'play'
+                        and r['start'] <= op['start'] and r['end'] >= op['end']]
+            require(len(coverage) == 1, f'{sid}: operation {oid} needs one unambiguous played visual evidence range')
+            if len(coverage) == 1:
+                ref = coverage[0]
+                placements[oid] = (ref['output_start'] + op['start'] - ref['start'],
+                                   ref['output_start'] + op['end'] - ref['start'])
+        for oid, (start, end) in placements.items():
+            for pred in operations[oid]['predecessors']:
+                require(pred in shown or pred in placements, f'{sid}: sequential predecessor not shown earlier')
+                if pred in placements:
+                    require(placements[pred][1] <= start, f'{sid}: mapped predecessor ends after operation starts')
             shown.add(oid)
     for oid, op in operations.items():
         require(oid in shown or bool(op['omission_reason'].strip()), f'{oid}: omitted operation requires explicit rationale')
@@ -191,7 +217,7 @@ def artifacts(plan):
         lines.extend([f'## {scene["id"]} · {cursor:g}–{cursor + scene["duration"]:g}s · {scene["claim_state"]}',
                       f'Purpose: {scene["purpose"]}', f'Audio: {scene["spoken"] or "[silent]"}',
                       f'Visual: {scene["visual"]}', f'Alignment: {scene["alignment"]}',
-                      'Evidence: ' + (', '.join(f'{r["source_id"]} {r["start"]:g}–{r["end"]:g}s ({r["role"]})' for r in scene['evidence']) or '[missing]'), ''])
+                      'Evidence: ' + (', '.join(f'{r["source_id"]} {r["start"]:g}–{r["end"]:g}s ({r["role"]}) ({r["playback"]} at scene {r["output_start"]:g}–{r["output_end"]:g}s)' for r in scene['evidence']) or '[missing]'), ''])
         lines.append('Operations: ' + (', '.join(scene['operation_ids']) or '[none]'))
         cursor += scene['duration']
     lines.extend(['', '## Operation inventory'])

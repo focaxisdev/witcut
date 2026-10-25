@@ -51,8 +51,8 @@ Next action: bounded step, or stop with no change
 
 ## Repair and stop
 
-For a blocking defect, fix the smallest affected area within authorization, test that excerpt, then check the new candidate in context for regressions. Mark obsolete QA as belonging to its old candidate; do not silently reuse it.
+Use the [shared loop contract](collaboration.md) for bounded local fixes, escalation, and stopping. Mark obsolete QA as belonging to its old candidate; do not silently reuse it.
 
 Review-only means no source edits, re-exports, or metadata changes. For a frozen cut, report optional polish separately and leave the file unchanged. Do not reopen the entire production pipeline because a nonblocking improvement is conceivable.
 
-Stop when the requested checks are complete, requirements are met, and no blocking finding remains. If a required check cannot run, name it rather than endlessly polling or claiming completion. Owner acceptance remains distinct from reviewer confidence.
+The review loop must report any required check that could not run. Owner acceptance remains distinct from reviewer confidence.

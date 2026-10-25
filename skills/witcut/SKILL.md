@@ -16,7 +16,10 @@ Do not repeat the entire production process for a narrow review. Read only the r
 - New recording, tiny UI, resolution, or motion issues: [capture](references/capture.md).
 - Encoded draft, playback issue, or review-only request: [QA](references/qa.md).
 - Approved cut, upload, backup, or restoration: [handoff](references/handoff.md).
+- Model/reasoning selection, delegation, and bounded revision loops: [collaboration](references/collaboration.md). Apply the same loop contract at planning, source, execution, review, and audience-goal levels.
 - Concrete failure patterns: [production lessons](examples/production-lessons.md).
+
+For the bounded original-media execution test, use the [synthetic pilot](references/render-fixture.md); its successful render is not production acceptance.
 
 ## 1. Establish the current brief
 
@@ -50,7 +53,7 @@ Review the actual encoded candidate, not just source canvases or contact sheets.
 
 Record timestamped findings against an identified file/version, with impact and the smallest useful correction. Use an independent reviewer when consequential ambiguity warrants it; do not require one for every minor revision. Never substitute a perfect score for evidence.
 
-Repair blocking defects within scope, test the affected excerpt, then recheck the candidate for regressions. Stop when requirements are met and no unresolved blocking defect remains; distinguish optional polish from required fixes. A read-only review produces findings only. A frozen cut stays unchanged unless modification is newly authorized.
+Use the [shared loop contract](references/collaboration.md) to repair and stop. The top-level check remains viewer understanding of the current brief; passing every delegated task does not establish it. A read-only review produces findings only. A frozen cut stays unchanged unless modification is newly authorized.
 
 ## 6. Deliver the exact approved work
 

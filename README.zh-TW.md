@@ -10,7 +10,7 @@
 
 Witcut 目前是 **agent 可使用的製作工作流 skill**：協助規劃分鏡、錄製真實操作、有目的地剪輯、檢查交付檔，以及整理可恢復的製作交接。
 
-它**還不是自動剪輯引擎或雲端服務**。需要執行環境原本就有錄製、剪輯、檢視工具與使用權限。內附的 Python 程式僅檢查套件結構，不會剪片或認證影片品質。
+它**還不是自動剪輯引擎或雲端服務**。需要執行環境原本就有錄製、剪輯、檢視工具與使用權限。Python 規劃工具檢查套件結構與證據連結資料；另有可選的單一 FFmpeg adapter，僅渲染原創合成測試短片，不錄製真實 UI，也不認證影片品質。
 
 ## 核心原則
 
@@ -42,4 +42,6 @@ Witcut 目前是 **agent 可使用的製作工作流 skill**：協助規劃分�
 
 ## 結構化規劃核心
 
-已提供[共用規劃核心](skills/witcut/references/planning.md)，分為產品展示與 Podcast 轉影片兩種 profile，由同一份輸入產出影音分鏡劇本、機器可讀 shot plan 與缺件清單。範例是原創合成文字 fixture，不是實際錄影或矽聲電台素材；驗證通過不代表媒體、授權或語意已查證。目前沒有 renderer。
+已提供[共用規劃核心](skills/witcut/references/planning.md)，分為產品展示與 Podcast 轉影片兩種 profile，由同一份輸入產出影音分鏡劇本、機器可讀 shot plan 與缺件清單。範例是原創合成文字 fixture，不是實際錄影或矽聲電台素材；驗證通過不代表媒體、授權或語意已查證。規劃格式 v2 明確記錄來源到輸出時間；v1 需人工確認映射後遷移。另有[受限的原創合成短片 adapter](skills/witcut/references/render-fixture.md)，尚非通用 renderer；文件列出可選的 FFmpeg 語音依賴與生成、重現命令。缺依賴時整合測試會明確 skip，不影響標準函式庫規劃工具。
+
+[協作策略](skills/witcut/references/collaboration.md) 依環境可用能力選擇模型與推理設定，界定企劃、素材、執行、獨立審查責任。各層使用有限 loop，最上層仍須驗收觀眾理解，不能用子任務全過替代。

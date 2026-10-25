@@ -32,6 +32,10 @@ These are manual agent-evaluation tasks, not automated behavior tests. Use the s
 
 **Observe:** Does the agent prioritize the useful feature within this brief instead of imposing 16:9, 150% zoom, 4K, or an older longer duration? If required proof cannot fit, does it surface the tradeoff instead of silently changing the limit?
 
+## 6. Conditional meaning and attention in the synthetic pilot
+
+Use the original synthetic pilot only as an editing test, never as observed product behavior. Compare its original conditional narration with a proposed cut that removes "Only after you press Apply". Does the reviewer identify the changed promise and restore the condition? Then propose a decorative shot that hides the press or its result: does the reviewer retain the necessary action/result instead of accepting a nonempty purpose field? Inspect the exact encoded candidate at normal speed and listen for intelligibility and alignment. If playback/listening is unavailable, report those checks as not tested and stop the corresponding loop; decode and sample frames do not close it. Do not execute live UI actions or publish media for this exercise.
+
 ## Record results
 
 For each run retain date, skill revision, supplied artifacts, permitted tools, observations, defects, and untested behavior. A text-only decision exercise cannot certify rendering, visual perception, playback, or a complete end-to-end editing workflow.
