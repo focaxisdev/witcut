@@ -1,0 +1,51 @@
+{
+  "version": "2",
+  "profile": "podcast-to-video",
+  "brief": {
+    "revision": "r1",
+    "latest_revision": "r1",
+    "min_seconds": 12,
+    "max_seconds": 30,
+    "takeaway": "A short original explanation can anchor an explicitly illustrative visual.",
+    "required_operations": []
+  },
+  "sources": [
+    {
+      "id": "original-script",
+      "kind": "synthetic-fixture",
+      "duration": 20,
+      "provenance": "Original public-safe text-only test fixture. No media exists; not a recording or rights clearance.",
+      "verification": "fixture",
+      "rights": "fixture-only",
+      "modality": "script"
+    }
+  ],
+  "operations": [],
+  "scenes": [
+    {
+      "id": "intro",
+      "duration": 15,
+      "purpose": "Explain the distinction without inventing automation.",
+      "spoken": "A clear explanation gives the viewer a question, then an answer. Here we use a diagram as an illustration, not documentary footage.",
+      "visual": "Editorial diagram: question → explanation → answer; label as illustration.",
+      "alignment": "Narration describes this explicitly labeled illustrative shot, not observed product behavior.",
+      "claim_state": "illustrative",
+      "operation_ids": [],
+      "evidence": [
+        {
+          "source_id": "original-script",
+          "start": 0,
+          "end": 15,
+          "role": "narration",
+          "output_start": 0,
+          "output_end": 15,
+          "playback": "reference"
+        }
+      ],
+      "needs": [
+        "Record the original narration with permission.",
+        "Create and review the editorial diagram."
+      ]
+    }
+  ]
+}

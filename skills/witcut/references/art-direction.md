@@ -50,4 +50,4 @@ Use restrained easing and a coherent motion vocabulary. Refined does not mean sl
 
 ## Bounded refinement
 
-Review against purpose: can a first-time viewer identify the operation and understand its result? Name the defect and its impact. Preserve already-approved behavior and brand treatment when correcting a local composition. Stop optional polish when its benefit is small relative to recapture or regression risk, especially after owner acceptance.
+Review against purpose: can a first-time viewer identify the operation and understand its result? Name the defect and its impact. Preserve already-approved behavior and brand treatment when correcting a local composition. Apply the [shared loop contract](collaboration.md); treat low-benefit polish separately from blockers, especially after owner acceptance.

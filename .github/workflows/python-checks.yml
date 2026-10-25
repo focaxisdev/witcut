@@ -1,0 +1,30 @@
+name: Pure Python checks
+
+on:
+  push:
+    branches: [main, planning-loop-v1]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package-and-planner:
+    name: Package and planner (no renderer)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+      - name: Validate package structure
+        run: python3 scripts/validate.py
+      - name: Package unit tests
+        run: python3 -m unittest discover -s tests -p 'test_validate.py' -v
+      - name: Planner unit tests
+        run: python3 -m unittest discover -s tests -p 'test_plan.py' -v
+      - name: State verification boundary
+        run: echo 'Renderer integration was not run. Actual viewing and listening remain unverified.'
