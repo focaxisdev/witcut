@@ -1,0 +1,96 @@
+{
+  "version": "1",
+  "profile": "product-demo",
+  "brief": {
+    "revision": "r2",
+    "latest_revision": "r2",
+    "min_seconds": 10,
+    "max_seconds": 45,
+    "takeaway": "Two alternative tools, each requiring a manual action.",
+    "required_operations": [
+      "select-a",
+      "select-b"
+    ]
+  },
+  "sources": [
+    {
+      "id": "mock-ui",
+      "kind": "synthetic-fixture",
+      "duration": 30,
+      "provenance": "Original public-safe text-only test fixture. No media exists; not a recording or rights clearance.",
+      "verification": "fixture",
+      "rights": "fixture-only",
+      "modality": "visual"
+    }
+  ],
+  "operations": [
+    {
+      "id": "select-a",
+      "relationship": "independent",
+      "predecessors": [],
+      "observation": "Fixture: user manually selects tool A.",
+      "source_id": "mock-ui",
+      "start": 0,
+      "end": 5,
+      "omission_reason": ""
+    },
+    {
+      "id": "select-b",
+      "relationship": "independent",
+      "predecessors": [],
+      "observation": "Fixture: separate example; user manually selects tool B.",
+      "source_id": "mock-ui",
+      "start": 10,
+      "end": 15,
+      "omission_reason": ""
+    }
+  ],
+  "scenes": [
+    {
+      "id": "a",
+      "duration": 8,
+      "purpose": "Explain the distinction without inventing automation.",
+      "spoken": "Manually choose A.",
+      "visual": "Illustrative A example; editorial label: synthetic fixture.",
+      "alignment": "Narration describes this explicitly labeled illustrative shot, not observed product behavior.",
+      "claim_state": "illustrative",
+      "operation_ids": [
+        "select-a"
+      ],
+      "evidence": [
+        {
+          "source_id": "mock-ui",
+          "start": 0,
+          "end": 5,
+          "role": "visual"
+        }
+      ],
+      "needs": [
+        "Capture authorized real footage before production."
+      ]
+    },
+    {
+      "id": "b",
+      "duration": 8,
+      "purpose": "Explain the distinction without inventing automation.",
+      "spoken": "Alternatively, manually choose B.",
+      "visual": "Separate illustrative B example, no causal transition.",
+      "alignment": "Narration describes this explicitly labeled illustrative shot, not observed product behavior.",
+      "claim_state": "illustrative",
+      "operation_ids": [
+        "select-b"
+      ],
+      "evidence": [
+        {
+          "source_id": "mock-ui",
+          "start": 10,
+          "end": 15,
+          "role": "visual"
+        }
+      ],
+      "needs": [
+        "Capture authorized real footage before production."
+      ]
+    }
+  ]
+}
