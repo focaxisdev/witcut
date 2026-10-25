@@ -11,6 +11,10 @@ REQUIRED = (
     'skills/witcut/references/capture.md',
     'skills/witcut/references/qa.md',
     'skills/witcut/references/handoff.md',
+    'skills/witcut/references/planning.md',
+    'skills/witcut/scripts/plan.py',
+    'skills/witcut/examples/plans/product-demo.json',
+    'skills/witcut/examples/plans/podcast-to-video.json',
     'skills/witcut/examples/production-lessons.md',
 )
 LINK = re.compile(r'\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"\n]*")?\)')
