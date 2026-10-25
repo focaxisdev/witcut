@@ -10,7 +10,7 @@ An agent skill for making thoughtful product-demo videos from real UI—not just
 
 Witcut is an **instruction-driven production workflow**. It helps an agent plan shots, capture authentic interactions, make motivated editing decisions, review the actual deliverable, and hand off recoverable work using tools available in its environment.
 
-It is **not yet an automatic video editor**, rendering engine, hosted service, or browser-control integration. Loading this skill does not provide those tools or grant access to a computer. The included Python script validates repository structure; it does not edit or certify videos.
+It is **not yet an automatic video editor**, rendering engine, hosted service, or browser-control integration. Loading this skill does not provide those tools or grant access to a computer. The included Python tools validate repository structure and evidence-linked planning data; they do not edit or certify videos.
 
 ## Why it exists
 
@@ -65,11 +65,13 @@ python3 scripts/validate.py
 python3 -m unittest discover -s tests -v
 ```
 
-These checks validate the package's frontmatter, local Markdown file links, and required structure. They cannot establish artistic quality, privacy completeness, licensing, or agent behavior. [Scenario checks](tests/scenarios.md) provide realistic behavioral evaluation tasks and evidence requirements.
+These checks validate the package's frontmatter, local Markdown file links, required structure, and planning-schema invariants (including adversarial inputs and CLI output protection). They cannot establish artistic quality, privacy completeness, licensing, or agent behavior. [Scenario checks](tests/scenarios.md) provide realistic behavioral evaluation tasks and evidence requirements.
 
 ## Roadmap—not shipped capabilities
 
-1. A structured shot plan with source ranges and provenance.
+Shipped planning milestone: [shared planning core](skills/witcut/references/planning.md) for product-demo and podcast-to-video profiles, deriving an audiovisual script, machine-readable shot plan, and missing-material list. Synthetic examples are not real media evidence.
+
+1. Timed narration and richer editorial-asset contracts, followed by source-inspecting adapters.
 2. Deterministic timeline and render adapters, with small reproducible fixtures.
 3. Automated technical checks tied to the exact output artifact.
 4. Agent-assisted rough cuts with reviewable decisions and explicit approval boundaries.
